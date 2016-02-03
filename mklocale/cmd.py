@@ -1,11 +1,11 @@
 import argparse
-import os
-import yaml
 import logging
-from babel.messages.pofile import write_po
 
-from mklocale.utils import listify, merge_by_language
+import yaml
+
 from mklocale import transifex
+from mklocale.cats import write_catalog, merge_by_language
+from mklocale.utils import listify
 
 log = logging.getLogger("mklocale")
 
@@ -21,16 +21,10 @@ def cmdline(argv):
     for tx_config in listify(config.get("transifex")):
         catalogs.extend(transifex.read_catalogs(tx_config))
     for merged_catalog in merge_by_language(catalogs):
-        target_file = config["target"].format(lang=merged_catalog.locale)
-        target_dir = os.path.dirname(target_file)
-        if not os.path.isdir(target_dir):
-            os.makedirs(target_dir)
-
-        with open(target_file, "w") as outfp:
-            write_po(
-                outfp, merged_catalog,
-                width=10000, no_location=True,
-                omit_header=True, sort_output=True,
-                ignore_obsolete=True
-            )
-        log.info("Wrote %s" % target_file)
+        targets = [
+            t.format(lang=merged_catalog.locale)
+            for t
+            in listify(config["target"])
+        ]
+        for target_file in targets:
+            write_catalog(target_file, merged_catalog)
