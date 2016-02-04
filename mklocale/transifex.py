@@ -1,8 +1,8 @@
+import logging
 import os
 
 import requests
 import six
-import logging
 from babel.messages.pofile import read_po
 
 from mklocale.utils import listify

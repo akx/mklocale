@@ -4,7 +4,7 @@ import logging
 import yaml
 
 from mklocale import transifex
-from mklocale.cats import write_catalog, merge_by_language
+from mklocale.cats import merge_by_language, write_catalog
 from mklocale.utils import listify
 
 log = logging.getLogger("mklocale")

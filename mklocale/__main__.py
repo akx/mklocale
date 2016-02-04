@@ -1,4 +1,5 @@
 import sys
+
 from .cmd import cmdline
 
 if __name__ == "__main__":
