@@ -6,7 +6,7 @@ import os
 import yaml
 
 from mklocale.cats import merge_by_language, write_catalog
-from mklocale.sources import transifex
+from mklocale.sources import transifex, local
 from mklocale.utils import listify
 
 log = logging.getLogger("mklocale")
@@ -33,6 +33,10 @@ def cmdline(argv):
 
     for tx_config in listify(config.get("transifex")):
         catalogs.extend(transifex.read_catalogs(tx_config))
+
+    for local_config in listify(config.get("local")):
+        catalogs.extend(local.read_catalogs(local_config))
+
     for merged_catalog in merge_by_language(catalogs):
         targets = [
             t.format(lang=merged_catalog.locale)
