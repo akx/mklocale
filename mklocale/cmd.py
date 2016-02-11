@@ -1,5 +1,7 @@
 import argparse
+import hashlib
 import logging
+import os
 
 import yaml
 
@@ -15,6 +17,16 @@ def cmdline(argv):
     ap = argparse.ArgumentParser()
     ap.add_argument("config")
     args = ap.parse_args()
+
+    try:
+        import requests_cache
+        requests_cache.install_cache(
+            os.path.realpath('./mklocale.%s.cache' % hashlib.md5(args.config).hexdigest()),
+            expire_after=86400
+        )
+    except ImportError:
+        pass
+    os.chdir(os.path.dirname(args.config))
     with open(args.config, "r") as infp:
         config = yaml.safe_load(infp)
     catalogs = []
