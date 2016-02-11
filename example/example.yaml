@@ -6,3 +6,8 @@ transifex:
     languages: fi
   - project: django
     languages: fi
+local:
+  - file: foo.json
+    language: fi
+  - file: foo.yaml
+    language: fi
